@@ -53,7 +53,7 @@
     caption: [Plan 2D avec vecteurs position et vitesse],
   )
 
-- *Trajectoire (10 minutes) :*
+- *Trajectoire :*
   - Si la position d'un objet change au cours du temps, nous pouvons décrire son mouvement en spécifiant son vecteur position en fonction du temps : $arrow(r)(t) = vec(x(t), y(t))$.
   - L'ensemble des points atteints par l'objet au cours de son mouvement forme sa *trajectoire*. La trajectoire est une courbe dans l'espace (ici, en 2D).
   - Exemples de trajectoires :
@@ -83,9 +83,8 @@
     arrow(v)_"moy" = (Delta arrow(r)) / (Delta t) = (arrow(r)_f - arrow(r)_i) / (t_f - t_i) = vec((Delta x)/(Delta t), (Delta y)/(Delta t)) = vec(v_("moy", x), v_("moy", y))
     $
   - La vitesse moyenne est un vecteur dont la direction est la même que celle du déplacement, et dont la magnitude est le déplacement total divisé par le temps écoulé.
-  *Example: *
 
-Si une voiture se déplace de la position $arrow(r)_i = vec(0, 0)$ à la position $arrow(r)_f = vec(10, 5)$ au cours d'un intervalle de temps $Delta t = 5$ secondes, alors le déplacement de la voiture est $Delta arrow(r) = vec(10, 5)$ et la vitesse moyenne est $arrow(v)_"moy" = vec(2, 1)$.
+*Exemple :* Si une voiture se déplace de la position $arrow(r)_i = vec(0, 0)$ à la position $arrow(r)_f = vec(10, 5)$ au cours d'un intervalle de temps $Delta t = 5$ secondes, alors le déplacement de la voiture est $Delta arrow(r) = vec(10, 5)$ et la vitesse moyenne est $arrow(v)_"moy" = vec(2, 1)$ m/s.
 
 - *Vitesse Instantanée :*
   - Pour décrire la vitesse de l'objet à un instant précis $t$, nous utilisons la notion de *vitesse instantanée*, $arrow(v)(t)$.
@@ -100,6 +99,29 @@ Si une voiture se déplace de la position $arrow(r)_i = vec(0, 0)$ à la positio
     où $v_x(t)$ est la composante de la vitesse selon l'axe $x$, et $v_y(t)$ est la composante de la vitesse selon l'axe $y$ à l'instant $t$.
   - La *magnitude* de la vitesse instantanée, $|arrow(v)(t)| = sqrt(v_x(t)^2 + v_y(t)^2)$, est appelée *vitesse scalaire*.
   - La *direction* de la vitesse instantanée est tangente à la trajectoire de l'objet au point considéré. Visualisation de ce concept avec des exemples de trajectoires courbes.
+
+*Exemples par type de trajectoire :*
+
+*1. Mouvement rectiligne uniforme :*
+  - Pour $arrow(r)(t) = vec(x_0 + v_x t, y_0 + v_y t)$, la vitesse instantanée est :
+    $
+    arrow(v)(t) = vec(v_x, v_y)
+    $
+  - Le vecteur vitesse est *constant* : direction, magnitude et composantes ne changent pas au cours du temps. Par exemple, un objet avec $arrow(r)(0) = vec(1, 2)$ et $arrow(v) = vec(3, 0)$ se déplace horizontalement à 3 m/s.
+
+*2. Mouvement circulaire uniforme :*
+  - Pour $arrow(r)(t) = vec(R cos(omega t), R sin(omega t))$, la vitesse instantanée est :
+    $
+    arrow(v)(t) = vec(-R omega sin(omega t), R omega cos(omega t)) = vec(-omega y(t), omega x(t))
+    $
+  - La magnitude est constante : $|arrow(v)| = R omega$. À l'instant $t = pi/(2 omega)$ (quand l'objet est en haut du cercle), $arrow(r) = vec(0, R)$ et $arrow(v) = vec(-R omega, 0)$ : la vitesse est purement horizontale et tangente au cercle.
+
+*3. Mouvement parabolique (projectile) :*
+  - Pour $arrow(r)(t) = vec(v_(0x) t, y_0 + v_(0y) t - 1/2 g t^2)$, la vitesse instantanée est :
+    $
+    arrow(v)(t) = vec(v_(0x), v_(0y) - g t)
+    $
+  - La composante horizontale $v_x$ reste constante, tandis que la composante verticale $v_y$ diminue linéairement. Par exemple, avec $v_(0x) = 10$ m/s, $v_(0y) = 20$ m/s et $g = 9.81$ m/s², à $t = 2$ s : $arrow(v) = vec(10, 20 - 9.81*2) = vec(10, 0.38)$ m/s. Le projectile est quasiment à son apogée.
 
 === 4. Accélération en 2D
 
@@ -118,17 +140,76 @@ Si une voiture se déplace de la position $arrow(r)_i = vec(0, 0)$ à la positio
     $
   - En termes de composantes, l'accélération instantanée est la dérivée des composantes de la vitesse par rapport au temps, ou la deuxième dérivée des composantes de la position par rapport au temps :
     $
-    arrow(a)(t) = vec((d v_x (t)) / (d t), (d v_y (t)) / (d t)) = vec(a_x (t), a_y (t)) = vec((d^2 x(t)) / (d t^2), (d^2 y(t)) / (d t^2))
+    arrow(a)(t) = vec(a_x (t), a_y (t))  = vec((d v_x (t)) / (d t), (d v_y (t)) / (d t)) = vec((d^2 x(t)) / (d t^2), (d^2 y(t)) / (d t^2))
     $
   - L'accélération peut changer la magnitude de la vitesse (l'objet accélère ou décélère), sa direction, ou les deux en même temps.
-  - *Cas particulier : Accélération constante.* Si l'accélération $arrow(a)$ est constante, alors $arrow(a)(t) = arrow(a) = vec(a_x, a_y)$, où $a_x$ et $a_y$ sont des constantes. Dans ce cas, nous pouvons intégrer les équations de l'accélération pour obtenir la vitesse et la position en fonction du temps :
+
+  *Cas particulier : Accélération constante.* Si l'accélération $arrow(a)$ est constante, alors $arrow(a)(t) = arrow(a) = vec(a_x, a_y)$, où $a_x$ et $a_y$ sont des constantes. Dans ce cas, nous pouvons *intégrer* les équations de l'accélération pour obtenir la vitesse et la position en fonction du temps :
+
     $
     arrow(v)(t) = arrow(v)_0 + arrow(a) t = vec(v_(0x) + a_x t, v_(0y) + a_y t)
     $
     $
-    arrow(r)(t) = arrow(r)_0 + arrow(v)_0 t + 1/2 arrow(a) t^2 = vec(x_0 + v_(0x) t + 1/2 a_x t^2, y_0 + v_(0y) t + 1/2 a_y t^2)
+    arrow(r)(t) = integral_(t_0)^t arrow(v)(t) d t = arrow(r)_0 + arrow(v)_0 t + 1/2 arrow(a) t^2 = vec(x_0 + v_(0x) t + 1/2 a_x t^2, y_0 + v_(0y) t + 1/2 a_y t^2)
     $
     où $arrow(v)_0 = vec(v_(0x), v_(0y))$ est la vitesse initiale
     et $arrow(r)_0 = vec(x_0, y_0)$ est la position initiale.
 
     C'est ce cas particulier qui sera crucial pour l'étude du mouvement de projectile sous l'effet de la gravité.
+
+*Exemples par type de trajectoire :*
+
+*1. Mouvement rectiligne :*
+
+  - *Uniforme* : 
+  Pour 
+  $
+  arrow(v)(t) = vec(v_x, v_y)$ constante, 
+  
+  $arrow(a)(t) = vec(0, 0)$. 
+  
+  Aucune accélération n'est nécessaire pour maintenir le mouvement rectiligne uniforme.
+
+
+
+*2. Mouvement circulaire uniforme :*
+
+  *Position :*
+
+  - À l'instant $t$, le vecteur position est :
+  $
+    arrow(r)(t) = vec(R cos(omega t), R sin(omega t))
+  $
+
+
+  *Vitesse (dérivée de la position) :*
+  - Dérivons chaque composante par rapport au temps :
+  $
+    arrow(v)(t) = vec(d(R cos(omega t))/(d t), d(R sin(omega t))/(d t)) = vec(-R omega sin(omega t), R omega cos(omega t))
+  $
+
+
+  *Accélération (dérivée de la vitesse) :*
+  - Dérivons à nouveau chaque composante :
+  $
+    arrow(a)(t) = vec(-d(R omega sin(omega t))/(d t), d(R omega cos(omega t))/(d t)) = vec(-R omega^2 cos(omega t), -R omega^2 sin(omega t))
+  $
+
+
+  *Relation avec la position :*
+  - On observe que :
+  $
+  arrow(a)(t) = -omega^2 vec(R cos(omega t), R sin(omega t)) = -omega^2 arrow(r)(t)
+  $
+L'accélération est constante et bien dirigée vers le centre du cercle.
+
+*3. Mouvement parabolique (projectile) :*
+- L'équation de la trajectoire est :
+  $
+  arrow(r)(t) = vec(v_(0x) t, y_0 + v_(0y) t - 1/2 g t^2)
+  $  
+  - Pour $arrow(v)(t) = vec(v_(0x), v_(0y) - g t)$, l'accélération instantanée est :
+  $
+  arrow(a)(t) = vec(0, -g)
+  $
+  - L'accélération est *constante* et dirigée verticalement vers le bas. Avec $g = 9.81$ m/s², quel que soit l'instant $t$, $arrow(a) = vec(0, -9.81)$ m/s². Cette accélération change uniquement la composante verticale de la vitesse. La composante horizontale reste inchangée.
