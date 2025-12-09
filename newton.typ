@@ -1,5 +1,5 @@
 #set text(font: "Linux Libertine", lang: "fr", size: 12pt)
-#set page(paper: "a4", margin: 2.5cm)
+#set page(paper: "us-letter", margin: 2.5cm)
 #set par(justify: true)
 
 = Physique du Jeu : Les 3 Lois de Newton
@@ -39,19 +39,19 @@ C'est la loi la plus importante pour nous, car c'est celle qu'on code littérale
 #box(fill: luma(245), stroke: 1pt + red, inset: 1em, radius: 5pt, width: 100%)[
   *La Formule :* $arrow(F) = m dot arrow(a)$
   
-  Pour le codeur, on l'écrit plutôt :
+  Dans notre cas, on cherche l'accélération :
   $ arrow(a) = arrow(F) / m $
 ]
 
 *Ce que ça veut dire :*
 L'accélération ($arrow(a)$) dépend de deux choses :
-1.  La puissance de la poussée ($arrow(F)$).
-2.  La lourdeur de l'objet ($m$).
+1.  Une force : ($arrow(F)$).
+2.  La lourdeur intrinsèque de l'objet ($m$).
 
 *Exemple "Vie de tous les jours" :*
 Imaginez un caddie de supermarché.
-- *Vide ($m$ petit)* : Une petite poussette le fait partir à toute vitesse.
-- *Plein d'eau ($m$ grand)* : La même poussette le fait à peine bouger.
+- *Vide ($m$ petit)* : Une petite force le fait partir à toute vitesse.
+- *Plein d'eau ($m$ grand)* : La même force le fait à peine bouger.
 
 *Exemple "Jeu Vidéo" (Balancing) :*
 Imaginez un jeu de tir (FPS) avec deux classes de personnages :
@@ -59,12 +59,13 @@ Imaginez un jeu de tir (FPS) avec deux classes de personnages :
 - *Le Tank (Masse = 200kg)* : Avec la même touche "Avancer" (Force = 500N), il accélère seulement à $2.5 "m/s"^2$. Il est lent et lourd.
 
 *Dans Three.js :*
-C'est ici qu'on calcule `acceleration`. Si on veut simuler du vent, de la gravité ou des ressorts, on additionne toutes les forces, on divise par la masse, et on obtient l'accélération pour mettre à jour la vitesse.
+C'est ici qu'on calcule `acceleration`. Si on veut simuler du vent, de la gravité ou des ressorts, on additionne toutes les forces, on divise par la masse, et on obtient l'accélération pour mettre à jour la vitesse en utilisant la méthode d'Euler.
+Et de la vitesse, on modifie la position, toujours en utilisant la méthode d'Euler une deuxième fois.
 
 #line(length: 100%, stroke: 0.5pt + gray)
 
 == 3. La Troisième Loi : Action-Réaction
-_Le principe du Karma immédiat_
+_Les forces sont des paires_
 
 #box(fill: luma(245), stroke: 1pt + gray, inset: 1em, radius: 5pt, width: 100%)[
   *La Loi :* Pour toute action (force), il y a une réaction égale et opposée.
@@ -111,12 +112,14 @@ On ne peut pas toucher sans être touché. Si vous poussez un mur, le mur vous p
 
 = Annexe : Pourquoi des objets de masses différentes tombent-ils avec la même vitesse ?
 
-La force qui agit sur un objet est la force de gravité, qui est proportionnelle à la masse de l'objet.
+La "force de pesanteur" est la force d'attraction gravitationnelle exercée par un astre (comme la Terre) sur un corps, et qui est aussi appelée "poids". Elle est calculée par la formule :
 
-$ arrow(F)_(g) = m g $
+$ arrow(P)_(g) = m . arrow(g) $
 
-Or, l'accélération est proportionnelle à la force:
 
-$ arrow(a) = arrow(F) / m $
+La deuxième loi de Newton nous dit que l'accélération est proportionnelle à la force :
 
-Donc, l'accélération est inversement proportionnelle à la masse.
+$ arrow(a) = arrow(F) / m = (m . arrow(g)) / m = arrow(g) $
+
+Donc, l'accélération est la même pour tous les objets, même si la force qui s'applique à eux est proportionnelle à leur masse.
+

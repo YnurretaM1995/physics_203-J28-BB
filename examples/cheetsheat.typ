@@ -65,7 +65,7 @@ Voici les méthodes que vous utiliserez 90% du temps pour calculer des trajectoi
 
   [Normaliser], 
   [`v1.normalize()`], 
-  [$arrow(v)_1 = arrow(v)_1 / ||arrow(v)_1||$ \ _(Longueur devient 1)_],
+  [$arrow(v)_1 = arrow(v)_1 / (||arrow(v)_1||)$ \ _(Longueur devient 1)_],
   
   [Longueur (Norme)], 
   [`let L = v1.length()`], 
@@ -80,7 +80,9 @@ Pour l'intégration d'Euler ($"pos" = "pos" + "vel" \cdot "dt"$), n'utilisez pas
 // La méthode PRO (Rapide et propre)
 position.addScaledVector(velocity, dt); 
 
+velA.addScaledVector(impulse, 1 / mA);
 // Équivalent à : position += velocity * dt
+// et velA += impulse / mA
 ```
 
 == 4. Gestion de la mémoire : Clone vs Copy
