@@ -1,5 +1,5 @@
-#set text(font: "Linux Libertine", lang: "fr", size: 12pt)
-#set page(paper: "a4", margin: 3cm)
+#set text(font: "Georgia", lang: "fr", size: 12pt)
+#set page(paper: "us-letter", margin: 3cm)
 #set par(justify: true)
 
 = Session 2 : Cinématique 2D et Mouvement de Projectile
