@@ -176,7 +176,7 @@ function resolveBallCollision(ballA, ballB) {
     // const impulse = ??;
     // velA.addScaledVector(impulse, 1 / mA);
     // velB.addScaledVector(impulse, -1 / mB);
-    // --- FIN ZONE ÉTUDIANT ---
+    // --- FIN enZONE ÉTUDIANT ---
 
     // Correction Position
     const overlap = (RADIUS * 2) - dist;
