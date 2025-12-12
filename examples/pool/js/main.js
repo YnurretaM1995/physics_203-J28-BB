@@ -49,13 +49,25 @@ function init() {
     renderer.shadowMap.enabled = true;
     document.body.appendChild(renderer.domElement);
 
-    // Lumières
-    scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-    const light = new THREE.SpotLight(0xffffff, 800);
-    light.position.set(0, 15, 0);
-    light.castShadow = true;
-    light.shadow.mapSize.set(2048, 2048);
-    scene.add(light);
+    // Lumières - Éclairage amélioré pour bien voir le modèle
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));  // Augmenté de 0.4 à 0.6
+    
+    // Lumière principale (au-dessus)
+    const mainLight = new THREE.SpotLight(0xffffff, 1200);  // Augmenté de 800 à 1200
+    mainLight.position.set(0, 15, 0);
+    mainLight.castShadow = true;
+    mainLight.shadow.mapSize.set(2048, 2048);
+    mainLight.angle = Math.PI / 3;  // Angle plus large
+    scene.add(mainLight);
+    
+    // Lumières d'appoint pour éviter les zones trop sombres
+    const fillLight1 = new THREE.DirectionalLight(0xffffff, 0.3);
+    fillLight1.position.set(10, 10, 10);
+    scene.add(fillLight1);
+    
+    const fillLight2 = new THREE.DirectionalLight(0xffffff, 0.3);
+    fillLight2.position.set(-10, 10, -10);
+    scene.add(fillLight2);
 
     // Configuration
     setBallParams(params);
@@ -148,8 +160,9 @@ export function resetGame() {
         gameState.setState(GameStates.IDLE);
     }
     
-    // Reset au Joueur 1
+    // Reset au Joueur 1 et réinitialiser les balles capturées
     gameState.resetPlayer();
+    gameState.resetBalls();
     updateHUD();
 }
 
@@ -293,6 +306,10 @@ function handleTurnEnd() {
         
         if (!hasBlack) {
             // Bon tir ! Le joueur garde la main
+            // Enregistrer les balles capturées pour le joueur actuel
+            turnInfo.ballsPotted.forEach(ballNum => {
+                gameState.addBallToCurrentPlayer(ballNum);
+            });
             switchTurn = false;
             message = "Joli coup ! Rejouez.";
         }

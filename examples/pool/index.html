@@ -22,7 +22,7 @@
         
         <!-- 1. MAIN MENU -->
         <div id="screen-menu" class="screen" style="display: flex;">
-            <h1 class="game-title">BILLARD MASTER 3D</h1>
+            <h1 class="game-title">Pool Pro Tournament</h1>
             <div class="menu-buttons">
                 <button id="btn-play" class="btn primary">JOUER</button>
                 <button id="btn-settings" class="btn">OPTIONS</button>
@@ -54,7 +54,10 @@
         <!-- 3. GAME HUD (Pendant le jeu) -->
         <div id="screen-hud" class="overlay" style="display: none;">
             <div class="top-bar">
-                <div id="score-display">Joueur 1</div>
+                <div id="score-display">
+                    <div class="player-name">Joueur 1</div>
+                    <div id="player-balls" class="player-balls"></div>
+                </div>
                 <button id="btn-pause" class="btn-icon">⏸</button>
             </div>
             <div id="game-tips">

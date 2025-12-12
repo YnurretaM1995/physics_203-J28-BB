@@ -20,6 +20,10 @@ class GameStateMachine {
         
         // Gestion des joueurs (mode 2 joueurs)
         this.currentPlayer = 1; // 1 ou 2
+        
+        // Balles capturées par chaque joueur
+        this.player1Balls = [];
+        this.player2Balls = [];
     }
 
     setState(newState) {
@@ -96,6 +100,25 @@ class GameStateMachine {
     
     resetPlayer() {
         this.currentPlayer = 1;
+    }
+    
+    // Gestion des balles capturées
+    addBallToCurrentPlayer(ballNumber) {
+        if (this.currentPlayer === 1) {
+            this.player1Balls.push(ballNumber);
+        } else {
+            this.player2Balls.push(ballNumber);
+        }
+        console.log(`Joueur ${this.currentPlayer} a capturé la balle ${ballNumber}`);
+    }
+    
+    getPlayerBalls(player) {
+        return player === 1 ? this.player1Balls : this.player2Balls;
+    }
+    
+    resetBalls() {
+        this.player1Balls = [];
+        this.player2Balls = [];
     }
 }
 

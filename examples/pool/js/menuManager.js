@@ -94,17 +94,45 @@ export function updateHUD() {
     const t = TEXTS[settings.lang];
     
     const label = settings.lang === 'fr' ? `Joueur ${player}` : `Player ${player}`;
-    const el = document.getElementById('score-display');
+    const scoreDisplay = document.getElementById('score-display');
+    const playerNameEl = scoreDisplay.querySelector('.player-name');
+    const playerBallsEl = scoreDisplay.querySelector('.player-balls');
     
-    el.innerText = label;
+    // Mettre à jour le nom du joueur
+    if (playerNameEl) {
+        playerNameEl.innerText = label;
+    }
     
     // Couleur distinctive par joueur
     if (player === 1) {
-        el.style.borderLeft = "5px solid #0055ff"; // Bleu pour J1
-        el.style.color = "white";
+        scoreDisplay.style.borderLeft = "5px solid #0055ff"; // Bleu pour J1
+        scoreDisplay.style.color = "white";
     } else {
-        el.style.borderLeft = "5px solid #ff5500"; // Orange pour J2
-        el.style.color = "white";
+        scoreDisplay.style.borderLeft = "5px solid #ff5500"; // Orange pour J2
+        scoreDisplay.style.color = "white";
+    }
+    
+    // Afficher les balles capturées
+    if (playerBallsEl) {
+        const balls = gameState.getPlayerBalls(player);
+        playerBallsEl.innerHTML = '';
+        
+        if (balls.length > 0) {
+            balls.forEach(ballNum => {
+                const badge = document.createElement('div');
+                badge.className = 'ball-badge';
+                
+                // Déterminer le type de balle (pleines 1-7, rayées 9-15)
+                if (ballNum >= 1 && ballNum <= 7) {
+                    badge.classList.add('solid');
+                } else if (ballNum >= 9 && ballNum <= 15) {
+                    badge.classList.add('striped');
+                }
+                
+                badge.innerText = ballNum;
+                playerBallsEl.appendChild(badge);
+            });
+        }
     }
 }
 

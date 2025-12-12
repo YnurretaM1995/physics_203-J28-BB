@@ -3,14 +3,14 @@
 ║              BILLARD MASTER 3D - CODE SOURCE COMPLET              ║
 ║                                                                   ║
 ║  Système UI complet avec menu, pause, détection de victoire      ║
-║  Date: 08/12/2025 23:06:58                                        ║
+║  Date: 11/12/2025 21:07:35                                        ║
 ║                                                                   ║
 ╚═══════════════════════════════════════════════════════════════════╝
 
 
 ═══════════════════════════════════════════════════════════════════
   FICHIER 1/10 : index.html
-  Lignes :       85
+  Lignes :       88
 ═══════════════════════════════════════════════════════════════════
 
 <!DOCTYPE html>
@@ -37,7 +37,7 @@
         
         <!-- 1. MAIN MENU -->
         <div id="screen-menu" class="screen" style="display: flex;">
-            <h1 class="game-title">BILLARD MASTER 3D</h1>
+            <h1 class="game-title">Pool Pro Tournament</h1>
             <div class="menu-buttons">
                 <button id="btn-play" class="btn primary">JOUER</button>
                 <button id="btn-settings" class="btn">OPTIONS</button>
@@ -69,7 +69,10 @@
         <!-- 3. GAME HUD (Pendant le jeu) -->
         <div id="screen-hud" class="overlay" style="display: none;">
             <div class="top-bar">
-                <div id="score-display">Joueur 1</div>
+                <div id="score-display">
+                    <div class="player-name">Joueur 1</div>
+                    <div id="player-balls" class="player-balls"></div>
+                </div>
                 <button id="btn-pause" class="btn-icon">⏸</button>
             </div>
             <div id="game-tips">
@@ -102,7 +105,7 @@
 
 ═══════════════════════════════════════════════════════════════════
   FICHIER 2/10 : css/style.css
-  Lignes :      170
+  Lignes :      208
 ═══════════════════════════════════════════════════════════════════
 
 body { 
@@ -145,8 +148,8 @@ body {
 /* TYPOGRAPHY */
 h1.game-title { 
     font-size: 4em; 
-    color: #2e8b57; 
-    text-shadow: 0 0 10px #00ff00; 
+    color: #17693b; 
+    text-shadow: 0 2px 2px #d1dfd1; 
     margin-bottom: 50px; 
     font-family: 'Impact', sans-serif; 
     letter-spacing: 2px; 
@@ -262,8 +265,46 @@ select {
     font-family: sans-serif; 
     font-size: 1.5em; 
     background: rgba(0,0,0,0.5); 
-    padding: 5px 15px; 
+    padding: 10px 15px; 
     border-radius: 5px; 
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.player-name {
+    font-weight: bold;
+}
+
+.player-balls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    font-size: 0.7em;
+}
+
+.ball-badge {
+    background: linear-gradient(135deg, #444, #222);
+    border: 1px solid #666;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Couleurs des balles selon leur numéro */
+.ball-badge.solid {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+}
+
+.ball-badge.striped {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+    color: white;
 }
 
 #game-tips { 
@@ -313,7 +354,7 @@ export const FRAME_HEIGHT = 0.45;
 
 ═══════════════════════════════════════════════════════════════════
   FICHIER 4/10 : js/gameState.js
-  Lignes :      103
+  Lignes :      126
 ═══════════════════════════════════════════════════════════════════
 
 // gameState.js
@@ -338,6 +379,10 @@ class GameStateMachine {
         
         // Gestion des joueurs (mode 2 joueurs)
         this.currentPlayer = 1; // 1 ou 2
+        
+        // Balles capturées par chaque joueur
+        this.player1Balls = [];
+        this.player2Balls = [];
     }
 
     setState(newState) {
@@ -414,6 +459,25 @@ class GameStateMachine {
     
     resetPlayer() {
         this.currentPlayer = 1;
+    }
+    
+    // Gestion des balles capturées
+    addBallToCurrentPlayer(ballNumber) {
+        if (this.currentPlayer === 1) {
+            this.player1Balls.push(ballNumber);
+        } else {
+            this.player2Balls.push(ballNumber);
+        }
+        console.log(`Joueur ${this.currentPlayer} a capturé la balle ${ballNumber}`);
+    }
+    
+    getPlayerBalls(player) {
+        return player === 1 ? this.player1Balls : this.player2Balls;
+    }
+    
+    resetBalls() {
+        this.player1Balls = [];
+        this.player2Balls = [];
     }
 }
 
@@ -1073,7 +1137,7 @@ function onResize() {
 
 ═══════════════════════════════════════════════════════════════════
   FICHIER 9/10 : js/menuManager.js
-  Lignes :      194
+  Lignes :      222
 ═══════════════════════════════════════════════════════════════════
 
 // menuManager.js
@@ -1172,17 +1236,45 @@ export function updateHUD() {
     const t = TEXTS[settings.lang];
     
     const label = settings.lang === 'fr' ? `Joueur ${player}` : `Player ${player}`;
-    const el = document.getElementById('score-display');
+    const scoreDisplay = document.getElementById('score-display');
+    const playerNameEl = scoreDisplay.querySelector('.player-name');
+    const playerBallsEl = scoreDisplay.querySelector('.player-balls');
     
-    el.innerText = label;
+    // Mettre à jour le nom du joueur
+    if (playerNameEl) {
+        playerNameEl.innerText = label;
+    }
     
     // Couleur distinctive par joueur
     if (player === 1) {
-        el.style.borderLeft = "5px solid #0055ff"; // Bleu pour J1
-        el.style.color = "white";
+        scoreDisplay.style.borderLeft = "5px solid #0055ff"; // Bleu pour J1
+        scoreDisplay.style.color = "white";
     } else {
-        el.style.borderLeft = "5px solid #ff5500"; // Orange pour J2
-        el.style.color = "white";
+        scoreDisplay.style.borderLeft = "5px solid #ff5500"; // Orange pour J2
+        scoreDisplay.style.color = "white";
+    }
+    
+    // Afficher les balles capturées
+    if (playerBallsEl) {
+        const balls = gameState.getPlayerBalls(player);
+        playerBallsEl.innerHTML = '';
+        
+        if (balls.length > 0) {
+            balls.forEach(ballNum => {
+                const badge = document.createElement('div');
+                badge.className = 'ball-badge';
+                
+                // Déterminer le type de balle (pleines 1-7, rayées 9-15)
+                if (ballNum >= 1 && ballNum <= 7) {
+                    badge.classList.add('solid');
+                } else if (ballNum >= 9 && ballNum <= 15) {
+                    badge.classList.add('striped');
+                }
+                
+                badge.innerText = ballNum;
+                playerBallsEl.appendChild(badge);
+            });
+        }
     }
 }
 
@@ -1274,7 +1366,7 @@ export function setupUI() {
 
 ═══════════════════════════════════════════════════════════════════
   FICHIER 10/10 : js/main.js
-  Lignes :      316
+  Lignes :      321
 ═══════════════════════════════════════════════════════════════════
 
 // main.js
@@ -1427,8 +1519,9 @@ export function resetGame() {
         gameState.setState(GameStates.IDLE);
     }
     
-    // Reset au Joueur 1
+    // Reset au Joueur 1 et réinitialiser les balles capturées
     gameState.resetPlayer();
+    gameState.resetBalls();
     updateHUD();
 }
 
@@ -1572,6 +1665,10 @@ function handleTurnEnd() {
         
         if (!hasBlack) {
             // Bon tir ! Le joueur garde la main
+            // Enregistrer les balles capturées pour le joueur actuel
+            turnInfo.ballsPotted.forEach(ballNum => {
+                gameState.addBallToCurrentPlayer(ballNum);
+            });
             switchTurn = false;
             message = "Joli coup ! Rejouez.";
         }
@@ -1601,6 +1698,6 @@ function handleTurnEnd() {
 
 Statistiques:
   - Fichiers compilés : 10/10
-  - Lignes totales    : 1517
-  - Date              : 08/12/2025 23:06:58
+  - Lignes totales    : 1614
+  - Date              : 11/12/2025 21:07:35
 
