@@ -99,6 +99,7 @@
 ]
 
 #example(title: "Exercice 4 : Le Drag Race (Code)")[
+  
   *Contexte :* Une voiture accélère en ligne droite.
   
   - Force Moteur : $F_"moteur" = 5000 "N"$ (Constante).
@@ -118,11 +119,8 @@
   - Angle de tir : $theta = 45 degree$.
   - Hauteur initiale : $y_0 = 0$.
 
-  *Question Papier :*
-  Calculer la portée théorique du tir (la distance $x$ lorsque le projectile retombe au sol $y=0$).
-  
   *Objectif Code :*
-  Vérifier ce résultat dans la simulation Three.js avec la méthode d'Euler.
+  Trouver ce résultat dans une simulation avec la méthode d'Euler.
 ]
 
 #example(title: "Exercice 6 : Le Cube sur la Pente (Code)")[
